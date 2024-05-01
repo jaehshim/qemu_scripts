@@ -17,7 +17,7 @@ $ ./build_kernel.sh
 ```
 
 # Run QEMU
-Before running QEMU, add `add-auto-load-safe-path /path/to/linux` to `~/.gdbinit` to use gdb scripts.
+Before running QEMU, add `add-auto-load-safe-path /path/to/linux` to `~/.gdbinit` to use gdb scripts.  
 Not sure but you may need to run `make scripts_gdb`
 ```
 # ./run_qemu.sh
