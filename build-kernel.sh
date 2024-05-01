@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# make defconfig
-# make menuconfig -> KGDB on
+# check README for kernel configuration
 pushd linux-6.0.10/ 
 echo "Make kernel"
 sudo make -j 30 || exit
