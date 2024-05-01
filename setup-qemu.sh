@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt install -y qemu qemu-utils
+sudo apt install -y qemu qemu-utils qemu-system-x86 cloud-init
 
 # Configure VM
 wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
