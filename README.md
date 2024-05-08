@@ -26,3 +26,28 @@ Not sure but you may need to run `make scripts_gdb`
 # gdb vmlinux
 # (gdb) target remote:1234
 ```
+
+# Connect module
+## QEMU script
+First, make a virtfs folder. Then locate your module code in the virtfs folder and build the module in host server.  
+(Kernel version on QEMU and host server must match)  
+Then, add a line to `run-qemu.sh`
+```
+-virtfs local,path=/path/to/virtio-dir,mount_tag=host0,security_model=passthrough,id=host0
+```
+In QEMU, mount virtfs by `sudo mount -t 9p -o trans=virtio host0 /mnt/host/`.  
+Now, virtio-dir is a shared directory between the host and QEMU.
+
+## GDB
+You must add the symbol table to GDB.  
+After loading the kernel module to QEMU, go to `/sys/modules/MODULE_NAME/sections`.  
+Then check the following values
+```
+# cat .text
+# cat .bss
+# cat .data
+```
+Using the values, add the symbol table to GDB by
+```
+(gdb) add-symbol-file /path/to/virtio-dir/MODULE_DIR/MODULE.ko [value from .text] -s .bss [value from .bss] -s .data [value from .data]
+```
