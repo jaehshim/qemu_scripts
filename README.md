@@ -53,7 +53,8 @@ Now, virtio-dir is a shared directory between the host and QEMU.
 
 ## 3. Build and load kernel module
 Now that the virtio-dir is mounted, you can build the kernel module.  
-Make sure to modify the KERNELDIR path in your kernel module makefile.
+Make sure to modify the KERNELDIR path in your kernel module makefile.  
+Also, don't forget to add a debug option when building your module.
 ```
 KERNELDIR := /path/to/virtio-dir/$(shell uname -r)/build
 ```
