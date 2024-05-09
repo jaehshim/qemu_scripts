@@ -28,38 +28,44 @@ Not sure but you may need to run `make scripts_gdb`
 ```
 
 # Connect module
-## 1. Kernel module preparation
+## 1. VirtFS setting
 First, make a virtfs directory.  
-```
-# mkdir virtio-dir
-```
-
-In order to build the module inside QEMU, place your kernel directory in the virtfs directory.
-After `build-kernel.sh`, copy `/lib/modules/KERNEL_VERSION` to the virtfs directory and modify the softlink to
-```
-# cd /path/to/modules
-# ln -s ../path/to/linux build
-```
-Now, place the kernel module directory that you want to debug in the virtfs directory
-
-## 2. QEMU script
 Then, add a line to `run-qemu.sh` for virtfs
 ```
 -virtfs local,path=/path/to/virtio-dir,mount_tag=host0,security_model=passthrough,id=host0
 ```
 In QEMU, mount virtfs by `sudo mount -t 9p -o trans=virtio host0 /mnt/host/`.  
 Now, virtio-dir is a shared directory between the host and QEMU.
+Place the module directory that you want to debug in the virtfs directory.  
 
+## 2-1. Option 1 - Build the module inside the QEMU and use it
+### 2-1-1. Kernel module preparation
+In order to build the module inside QEMU, place your kernel directory in the virtfs directory.  
+After running `build-kernel.sh`, copy `/lib/modules/KERNEL_VERSION` to the virtfs directory and modify the softlink to
+```
+# cd /path/to/modules
+# rm build
+# ln -s ../path/to/linux build
+```
 
-## 3. Build and load kernel module
-Now that the virtio-dir is mounted, you can build the kernel module.  
-Make sure to modify the KERNELDIR path in your kernel module makefile.  
+### 2-1-2. Build and load kernel module
+Now that the virtio-dir is mounted, you can access to the module directory in QEMU.  
+To build the module inside the QEMU, make sure to modify the KERNELDIR path in your kernel module makefile.  
 Also, don't forget to add a debug option when building your module.
 ```
 KERNELDIR := /path/to/virtio-dir/$(shell uname -r)/build
 ```
 
-## 4. GDB
+## 2-2. Option 2 - Build the module in host server and use it in QEMU
+When you want to build a module in the host server, you don't need to move the linux kernel source and
+modules directory in the virtfs directory.  
+Simply change the build option in Makefile as
+```
+KERNELDIR := /path/to/virtio-dir/KERNEL_VERSION/build
+```
+After building the module in host server, login to the QEMU and load the module in the virtfs directory.
+
+## 3. GDB
 You must add the symbol table to GDB.  
 After loading the kernel module to QEMU, go to `/sys/modules/MODULE_NAME/sections`.  
 Then check the following values
