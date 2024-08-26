@@ -17,6 +17,13 @@ $ ./build_kernel.sh
 ```
 
 # Run QEMU
+First run QEMU using cloud image, before attaching the kernel.
+If you run with the kernel using `run-qemu.sh`, the password would not work.
+Run `default-qemu.sh` first and check if QEMU boots well and password works well.
+ID is ubuntu, and you can find the password at `setup-qemu.sh`.
+
+
+# Run QEMU using GDB
 Before running QEMU, add `add-auto-load-safe-path /path/to/linux` to `~/.gdbinit` to use gdb scripts.  
 Not sure but you may need to run `make scripts_gdb`
 ```
