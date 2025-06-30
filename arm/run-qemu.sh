@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo qemu-system-aarch64 -m 16G -cpu cortex-a57 -M virt -nographic \
+sudo qemu-system-aarch64 -m 16G -cpu host -M virt,accel=kvm -nographic \
 	-pflash flash0.img -pflash flash1.img \
 	-drive if=none,file=jammy-server-cloudimg-arm64.img,id=hd0 \
 	-drive if=virtio,file=seed.img,format=raw,id=cloud \
